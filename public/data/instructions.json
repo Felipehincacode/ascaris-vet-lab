@@ -1,0 +1,274 @@
+{
+  "project": {
+    "title": "Plataforma: Caracterización macroscópica - SPA veterinaria",
+    "slug": "caracterizacion-macroscopica-spa",
+    "language": "es-CO",
+    "description": "SPA elegante e interactiva para la comunidad científica veterinaria. 5 pestañas (Inicio, Podcast, IA entrenada, Test, Galería/Sobre). Modal de video, modal de test, reproductor para podcast, chat-IA entrenada con los datos del proyecto.",
+    "theme": {
+      "palette": {
+        "background": "#0f1720",
+        "surface": "#0b1220",
+        "muted": "#94a3b8",
+        "accent1": "#0f766e",
+        "accent2": "#0b5e81",
+        "textPrimary": "#e6eef6",
+        "textSecondary": "#9fb1c8"
+      },
+      "fonts": {
+        "heading": "Inter, system-ui, -apple-system, 'Segoe UI', Roboto",
+        "body": "Lato, system-ui, -apple-system, 'Segoe UI', Roboto"
+      },
+      "buttons": {
+        "radius": "12px",
+        "shadow": "soft"
+      }
+    },
+    "techStack": {
+      "framework": "Next.js (app directory)",
+      "css": "TailwindCSS",
+      "animations": "Framer Motion",
+      "video": "React Player",
+      "audio": "HTMLAudio / React Audio Player",
+      "state": "React Context (o Zustand)",
+      "ia": "OpenAI-compatible endpoint (instrucciones incluidas)"
+    }
+  },
+  "assets_expected": {
+    "public_folder": [
+      "intro-video.mp4",
+      "last-frame.jpg",
+      "video_presentation.mp4",
+      "podcast_episode_01.mp3",
+      "images/higado_ejemplo_01.jpg",
+      "images/pulmon_ejemplo_02.jpg",
+      "images/intestino_ejemplo_03.jpg",
+      "logo_ia.svg"
+    ]
+  },
+  "layout": {
+    "root": {
+      "type": "spa",
+      "nav_style": "top_tabs",
+      "tabs": [
+        {"id":"inicio","label":"Inicio","route":"/"},
+        {"id":"podcast","label":"Podcast","route":"/podcast"},
+        {"id":"ia","label":"IA del proyecto","route":"/ia"},
+        {"id":"test","label":"Test","route":"/test"},
+        {"id":"galeria","label":"Galería / Sobre","route":"/galeria"}
+      ],
+      "global_components": [
+        "Header (logo + tabs + btn restart intro)",
+        "Footer (enlaces, créditos, exportar resultados)",
+        "VideoIntroManager (controla autoplay, progreso, transición)",
+        "GlobalStateProvider (videoState, modalState, podcastState, iaState, testState)"
+      ]
+    }
+  },
+  "components": {
+    "VideoPlayer": {
+      "description": "Reproductor a pantalla completa para intro (autoplay, muted), sin controles visibles. Fuente: /public/intro-video.mp4. Emite eventos: onEnd, onError, onProgress.",
+      "props": ["src","autoplay","muted","loop","onEnd","onProgress"]
+    },
+    "ImageTransition": {
+      "description": "Componente que muestra last-frame.jpg y hace crossfade al terminar el video. Usa Framer Motion para animación de entrada/salida.",
+      "props": ["src","transitionDuration"]
+    },
+    "ButtonGrid": {
+      "description": "Muestra 5 botones animados: Video Presentation, Podcast, IA, Test, Galería. Cada botón con icono, tooltip, y animación hover.",
+      "buttons": [
+        {"id":"video_presentation","label":"Video presentación","action":"openModal:videoPresentation"},
+        {"id":"podcast","label":"Podcast","action":"navigate:/podcast or transformToPlayer"},
+        {"id":"ia","label":"IA entrenada","action":"navigate:/ia or openPanel"},
+        {"id":"test","label":"Test","action":"openModal:testModal"},
+        {"id":"galeria","label":"Galería / Sobre","action":"navigate:/galeria"}
+      ]
+    },
+    "Modal": {
+      "description": "Reutilizable. Props: isOpen, onClose, title, size, content. Keyboard accessible (Esc close)."
+    },
+    "PodcastPlayer": {
+      "description": "Componente que transforma la UI: muestra carátula, barra de progreso, play/pause, skip, volume. Has 'minified' sticky player mode.",
+      "props": ["src","artwork","title","autoplay"]
+    },
+    "IAChat": {
+      "description": "Interfaz de chat para la IA entrenada con el proyecto. Soporta input, attachments (imagen), history, sugerencias rápidas. Avatar: logo_ia.svg.",
+      "props": ["modelEndpoint","trainingDataRef","instructions"]
+    },
+    "TestModal": {
+      "description": "Modal que muestra el test con paginación, progreso, feedback instantáneo (configurable). Export to PDF, save to localStorage.",
+      "props": ["questionsJson","timeLimit","onFinish"]
+    },
+    "GalleryCards": {
+      "description": "Tarjetas interactivas para equipo, imágenes y publicaciones. Cada tarjeta tiene modal con metadatos."
+    }
+  },
+  "modals": {
+    "videoPresentation": {
+      "id": "videoPresentation",
+      "title": "Presentación del proyecto",
+      "type": "video",
+      "src": "/public/video_presentation.mp4",
+      "player": "react-player",
+      "controls": true,
+      "fullscreenSupport": true
+    },
+    "testModal": {
+      "id": "testModal",
+      "title": "Test: Caracterización macroscópica",
+      "type": "interactive_test",
+      "questions_source": "embedded",
+      "questions_ref": "test_content.questions",
+      "config": {"timeRecommendedMinutes":20,"passingPercent":70}
+    }
+  },
+  "podcast": {
+    "defaultEpisode": {
+      "id": "ep01",
+      "title": "Episodio 1 - Introducción y hallazgos principales",
+      "src": "/public/podcast_episode_01.mp3",
+      "artwork": "/public/images/podcast_ep01.jpg",
+      "description": "Conversación con el equipo sobre metodologías y resultados."
+    },
+    "behavior": {
+      "navEnterTransformsToPlayer": true,
+      "stickyPlayerOnScroll": true,
+      "keyboardShortcuts": {"space":"play/pause"}
+    }
+  },
+  "ia_module": {
+    "description": "Chat IA entrenada con el contenido del proyecto (documentos, fichas, imágenes, anexos).",
+    "trainingData": {
+      "references": [
+        {"type":"file","path":"/data/anexo-1 caracterizacion macroscopica subsanado.docx"},
+        {"type":"file","path":"/data/anexo-1 caracterizacion macroscopica.docx"},
+        {"type":"notes","content":"Banco fotográfico + fichas metodológicas + JSON del test"}
+      ],
+      "indexingNotes": "Indexar secciones: metodología, clasificación macroscópica, hallazgos por órgano, normativa, recomendaciones."
+    },
+    "ui_instructions": {
+      "system_prompt": "Responde de forma técnica y clara, citando la sección del anexo cuando sea posible, evitando conjeturas fuera del material.",
+      "max_response_length": 400,
+      "show_sources": true
+    },
+    "endpoint_integration": {
+      "type": "openai",
+      "instructions": "Crear endpoint proxy que reciba prompts del front, incluya chunked context del anexo y devuelva respuestas con referencia de fuente (sección / página)."
+    }
+  },
+  "test_content": {
+    "meta": {
+      "title": "Test: Caracterización macroscópica por migración larvaria de Ascaris suum",
+      "description": "Evaluación de conocimientos sobre las lesiones macroscópicas (hígado, pulmón, intestino), frecuencia, clasificación y aspectos metodológicos del proyecto.",
+      "num_questions": 12,
+      "passing_percent": 70,
+      "time_recommended_minutes": 20
+    },
+    "questions": [
+      {
+        "id": 1,
+        "type": "mcq",
+        "text": "¿Cuál es el órgano donde clásicamente se describen las “manchas de leche” asociadas a la migración larvaria de Ascaris suum?",
+        "options": ["Pulmón","Hígado","Intestino grueso","Riñón"],
+        "answer_index": 1,
+        "explanation": "Las “manchas de leche” y “puntos blancos” son lesiones macroscópicas características del hígado por migración larvaria de A. suum."
+      },
+      {
+        "id": 2,
+        "type": "mcq",
+        "text": "Según la clasificación macroscópica, ¿cómo se denomina una lesión hepática bien delimitada de 1–3 mm de diámetro?",
+        "options": ["Mancha de leche","Punto blanco","Granuloma calcificado","Pústula"],
+        "answer_index": 1,
+        "explanation": "En el anexo se distingue “puntos blancos” (~1–3 mm) de “manchas de leche” (>5 mm)."
+      },
+      {
+        "id": 3,
+        "type": "vf",
+        "text": "La migración larvaria de Ascaris suum puede producir neumonía intersticial en cerdos.",
+        "answer_boolean": true,
+        "explanation": "El paso larval por pulmón puede causar neumonía intersticial y hemorragias multifocales."
+      },
+      {
+        "id": 4,
+        "type": "mcq",
+        "text": "En estudios regionales citados en el proyecto, ¿qué aspecto reforzó la necesidad de caracterizar lesiones por A. suum?",
+        "options": ["Ausencia total del parásito","Alta prevalencia documentada en algunas granjas y el impacto económico por decomisos","Que solo afecta aves","Que es exclusivo de jabalíes"],
+        "answer_index": 1,
+        "explanation": "Estudios locales mostraron prevalencias relevantes y pérdidas por decomisos."
+      },
+      {
+        "id": 5,
+        "type": "hotspot",
+        "text": "Señala en la imagen la lesión que corresponde a una 'mancha de leche' y clasifícala según su tamaño.",
+        "image": "/public/images/higado_ejemplo_01.jpg",
+        "expected_hotspot": {"x":0.45,"y":0.32,"w":0.12,"h":0.08},
+        "expected_classification": "Mancha de leche (>5 mm)",
+        "explanation": "Las manchas de leche son áreas grandes y difusas; marcarlas y clasificar como >5 mm."
+      },
+      {
+        "id": 6,
+        "type": "mcq",
+        "text": "¿Qué acción reglamentaria suele derivarse de la identificación de lesiones hepáticas compatibles con migración larvaria en plantas de beneficio?",
+        "options": ["Ninguna, se continúa con el proceso normal","Decomiso de las vísceras afectadas (vísceras rojas y blancas)","Vacunación inmediata del animal en línea","Traslado del animal a otro predio"],
+        "answer_index": 1,
+        "explanation": "La normativa referenciada indica decomisos de vísceras afectadas como medida sanitaria."
+      },
+      {
+        "id": 7,
+        "type": "mcq",
+        "text": "¿Qué alteración macroscópica intestinal se asocia frecuentemente con infecciones por A. suum según el proyecto?",
+        "options": ["Enteritis proliferativa","Úlcera gástrica crónica","Hiperplasia del páncreas","Cirrosis intestinal"],
+        "answer_index": 0,
+        "explanation": "Se registraron hallazgos de enteritis proliferativa con engrosamiento mucoso."
+      },
+      {
+        "id": 8,
+        "type": "mcq",
+        "text": "Una lesión pulmonar con áreas multifocales de hemorragia y consolidación del parénquima se describe como:",
+        "options": ["Neumonía intersticial / neumonía hemorrágica","Fibrosis hepática","Atrofia renal","Enterocolitis aguda"],
+        "answer_index": 0,
+        "explanation": "Las larvas atraviesan el pulmón y pueden producir hemorragias multifocales y neumonía intersticial."
+      },
+      {
+        "id": 9,
+        "type": "short",
+        "text": "Describe brevemente dos elementos que deben incluirse en la ficha de recolección fotográfica estándar del proyecto (máx. 30 palabras).",
+        "expected_samples": ["ID animal","fecha","órgano afectado","tipo de lesión","tamaño aproximado","severidad","observaciones"],
+        "explanation": "La matriz incluye ID, fecha, órgano, clasificación macroscópica, tamaño, número de lesiones y observaciones."
+      },
+      {
+        "id": 10,
+        "type": "mcq",
+        "text": "¿Cuál es el diseño del estudio descrito en el anexo para esta caracterización?",
+        "options": ["Experimental longitudinal","Observacional, descriptivo transversal","Ensayo clínico randomizado","Estudio de caso único"],
+        "answer_index": 1,
+        "explanation": "El proyecto se plantea como estudio cuantitativo, observacional, descriptivo transversal en plantas de beneficio."
+      },
+      {
+        "id": 11,
+        "type": "vf",
+        "text": "El banco fotográfico debe incluir una foto por cada cara de la víscera hepática, pulmonar y segmentos seleccionados de intestino.",
+        "answer_boolean": true,
+        "explanation": "El procedimiento describe fotografías estandarizadas: hígado (cada cara), pulmón (cada cara) e intestino (segmentos representativos)."
+      },
+      {
+        "id": 12,
+        "type": "mcq",
+        "text": "¿Cuál de las siguientes NO es una consecuencia directa mencionada en el documento por la presencia de lesiones por A. suum?",
+        "options": ["Pérdidas económicas por decomiso","Mejora inmediata de la conversión alimenticia","Necesidad de mejorar programas antiparasitarios","Relevancia para la formación académica"],
+        "answer_index": 1,
+        "explanation": "El documento menciona pérdidas económicas, la necesidad de control y aportes académicos; no se afirma una mejora inmediata en conversión."
+      }
+    ]
+  },
+  "exporters": {
+    "pdf": true,
+    "csv": true,
+    "localStorageBackup": true
+  },
+  "accessibility": {
+    "keyboardNavigation": true,
+    "ariaLabels": true,
+    "altTextsRequiredForImages": true,
+    "contrastChecks": true
+  }
+}
