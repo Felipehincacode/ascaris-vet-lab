@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useGlobal } from '@/context/GlobalContext';
+import ReactPlayer from 'react-player';
 
 export const VideoModal = () => {
   const { modalState, setModalState } = useGlobal();
@@ -19,7 +20,7 @@ export const VideoModal = () => {
           <video
             controls
             className="w-full h-full"
-            src="/video_presentation.mp4"
+            src="/El_invasor_invisible_porcino.mp4"
           >
             Su navegador no soporta el elemento de video.
           </video>

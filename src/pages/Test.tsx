@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle2, XCircle, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import yano from '@/assets/yano';
 
 interface Question {
   id: number;
@@ -176,7 +177,7 @@ const Test = () => {
     else message = 'Revisa el material y vuelve a intentarlo.';
 
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-subtle">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundImage: 'url(/testBackground)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <Card className="w-full max-w-2xl p-8 animate-scale-in">
           <div className="text-center">
             <h2 className="text-3xl font-heading font-bold mb-4">Test Completado</h2>
@@ -213,7 +214,7 @@ const Test = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-subtle">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundImage: 'url(/testBackground)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <Card className="w-full max-w-2xl p-6 md:p-8">
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">

@@ -23,8 +23,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <div className="min-h-screen bg-background">
-            <Header />
-            <main className="pt-16">
+            <main>
               <Routes>
                 <Route path="/" element={<Inicio />} />
                 <Route path="/podcast" element={<Podcast />} />

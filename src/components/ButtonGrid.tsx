@@ -6,9 +6,7 @@ import { useGlobal } from '@/context/GlobalContext';
 const buttons = [
   { id: 'video', label: 'Video Presentación', icon: Play, action: 'modal' },
   { id: 'podcast', label: 'Podcast', icon: Mic, action: 'navigate', route: '/podcast' },
-  { id: 'ia', label: 'IA Entrenada', icon: Bot, action: 'navigate', route: '/ia' },
   { id: 'test', label: 'Test Interactivo', icon: FileCheck, action: 'modal' },
-  { id: 'galeria', label: 'Galería', icon: ImageIcon, action: 'navigate', route: '/galeria' },
 ];
 
 export const ButtonGrid = () => {
@@ -28,22 +26,28 @@ export const ButtonGrid = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto p-8 animate-fade-in">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-3xl mx-auto p-2 animate-fade-in">
       {buttons.map((button, index) => {
         const Icon = button.icon;
         return (
-          <Button
+          <button
             key={button.id}
             onClick={() => handleClick(button)}
-            variant="outline"
-            className="h-32 flex-col gap-3 bg-card/50 backdrop-blur-sm hover:bg-card hover:shadow-elegant transition-all duration-300 group"
-            style={{ animationDelay: `${index * 100}ms` }}
+            className="px-4 py-2 flex items-center justify-center transition-all duration-200 group transform hover:scale-105 cursor-pointer"
+            style={{
+              animationDelay: `${index * 150}ms`,
+              background: 'none',
+              border: 'none'
+            }}
           >
-            <div className="w-12 h-12 rounded-full bg-gradient-hero flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Icon className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="text-base font-medium">{button.label}</span>
-          </Button>
+            <span className="text-sm font-medium text-white group-hover:text-gray-200 transition-colors duration-200"
+                  style={{
+                    textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 15px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,1)',
+                    filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.4))'
+                  }}>
+              {button.label}
+            </span>
+          </button>
         );
       })}
     </div>

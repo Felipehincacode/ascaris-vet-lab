@@ -6,7 +6,6 @@ import { useGlobal } from '@/context/GlobalContext';
 const tabs = [
   { id: 'inicio', label: 'Inicio', route: '/' },
   { id: 'podcast', label: 'Podcast', route: '/podcast' },
-  { id: 'ia', label: 'IA del proyecto', route: '/ia' },
   { id: 'test', label: 'Test', route: '/test' },
   { id: 'galeria', label: 'Galería / Sobre', route: '/galeria' },
 ];
@@ -25,14 +24,6 @@ export const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
-              <span className="text-xl font-bold">A</span>
-            </div>
-            <h1 className="text-lg font-heading font-semibold hidden md:block">
-              Caracterización Macroscópica
-            </h1>
-          </div>
 
           <nav className="flex items-center gap-1">
             {tabs.map((tab) => (
